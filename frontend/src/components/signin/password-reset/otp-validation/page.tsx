@@ -6,7 +6,7 @@ import { MessageCircleMore, X } from 'lucide-react';
 const OtpValidationPage = () => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>('OTP Code is invalid'); // Set initial error for testing
   const userEmail = 'name@mymail.com'; // This should come from your app state or URL params
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -60,7 +60,7 @@ const OtpValidationPage = () => {
               <button
                 type="button"
                 onClick={() => {/* Add resend logic */}}
-                className="text-gray-400 text-sm hover:text-gray-600"
+                className="text-gray-400 text-sm hover:text-gray-600 bg-white"
               >
                 Resend Code
               </button>
@@ -73,27 +73,25 @@ const OtpValidationPage = () => {
                 <button
                   type="button"
                   onClick={() => setError(null)}
-                  className="text-red-600 hover:text-red-700"
+                  className="text-red-600 hover:text-red-700 bg-white"
                 >
                   <X size={16} />
                 </button>
               </div>
             )}
 
-            <div className="flex justify-between space-x-4 mt-8">
-              {/* Back Button */}
+            <div className="flex justify-between items-center mt-8">
               <button
                 type="button"
                 onClick={() => navigate('/signin/password-reset')}
-                className="w-full bg-gray-50 text-gray-900 py-3 px-4 rounded-[4px] hover:bg-gray-100 transition-all text-[16px] font-medium uppercase"
+                className="text-gray-900 font-medium uppercase hover:underline bg-white"
               >
                 Back
               </button>
 
-              {/* Finish Button */}
               <button
                 type="submit"
-                className="w-full bg-red-600 text-white py-3 px-4 rounded-[4px] hover:bg-red-700 transition-all text-[16px] font-medium uppercase"
+                className="text-red-600 font-medium uppercase hover:text-red-700 bg-white"
               >
                 Finish
               </button>
