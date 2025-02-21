@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../../assets/comx-logo.svg';
-import { MessageCircleMore } from 'lucide-react';
+import logo from '../../../../assets/comx-logo.svg';
+import { MessageCircleMore, X } from 'lucide-react';
 
-const PasswordResetPage = () => {
+const OtpValidationPage = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const userEmail = 'name@mymail.com'; // This should come from your app state or URL params
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your password reset logic here
-    console.log('Password reset requested for:', email);
-    // Navigate to OTP validation page
-    navigate('/signin/password-reset/otp');
+    if (otp.length !== 4) {
+      setError('OTP Code is invalid');
+      return;
+    }
+    // Add your OTP validation logic here
+    console.log('OTP submitted:', otp);
   };
 
   return (
@@ -23,7 +27,7 @@ const PasswordResetPage = () => {
           <img src={logo} alt="ComX Logo" className="mx-auto h-12" />
         </div>
 
-        {/* Password Reset Form */}
+        {/* OTP Validation Form */}
         <div className="bg-white rounded-lg shadow-sm p-10">
           <h1 className="text-[32px] text-center text-gray-900 font-normal mb-2">Password Reset</h1>
           <p className="text-[16px] text-gray-600 text-center mb-8">
@@ -31,42 +35,67 @@ const PasswordResetPage = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email Field */}
+            {/* OTP Field */}
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Enter the Email Address you registered with
+              <label htmlFor="otp" className="block text-sm font-medium text-gray-700">
+                Enter the 4-digit code that was sent to {userEmail}
               </label>
               <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                id="otp"
+                value={otp}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  if (value.length <= 4) setOtp(value);
+                  if (error) setError(null);
+                }}
                 className="w-full px-3 py-2 bg-white border border-gray-300 text-black rounded-md focus:outline-none focus:ring-1 focus:ring-comx-green focus:border-comx-green"
-                placeholder="Enter your email"
+                placeholder="Enter code"
                 required
               />
             </div>
 
-            <p className="text-sm text-gray-500 italic mt-2">
-              Note that you'll be sent an OTP to the email address provided
-            </p>
+            {/* Resend Code Link */}
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={() => {/* Add resend logic */}}
+                className="text-gray-400 text-sm hover:text-gray-600"
+              >
+                Resend Code
+              </button>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-md p-3 flex justify-between items-center">
+                <span className="text-red-600 text-sm">{error}</span>
+                <button
+                  type="button"
+                  onClick={() => setError(null)}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            )}
 
             <div className="flex justify-between space-x-4 mt-8">
               {/* Back Button */}
               <button
                 type="button"
-                onClick={() => navigate('/signin')}
+                onClick={() => navigate('/signin/password-reset')}
                 className="w-full bg-gray-50 text-gray-900 py-3 px-4 rounded-[4px] hover:bg-gray-100 transition-all text-[16px] font-medium uppercase"
               >
                 Back
               </button>
 
-              {/* Proceed Button */}
+              {/* Finish Button */}
               <button
                 type="submit"
                 className="w-full bg-red-600 text-white py-3 px-4 rounded-[4px] hover:bg-red-700 transition-all text-[16px] font-medium uppercase"
               >
-                Proceed
+                Finish
               </button>
             </div>
           </form>
@@ -89,5 +118,4 @@ const PasswordResetPage = () => {
   );
 };
 
-export default PasswordResetPage;
-
+export default OtpValidationPage; 
