@@ -78,7 +78,10 @@ const SignInPage = () => {
                 </label>
               </div>
               <div>
-                <a href="#" className="text-red-600 text-sm hover:text-red-500">
+                <a 
+                  onClick={() => navigate('/signin/password-reset')} 
+                  className="text-red-600 text-sm hover:text-red-500 cursor-pointer"
+                >
                   Forgot Password?
                 </a>
               </div>
