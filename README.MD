@@ -19,7 +19,7 @@ This project is a Node.js and Express.js backend with MongoDB, supporting:
 
 1. Clone the Repository
 
-git clone https://github.com/your-username/authentication-api.git
+git clone https://github.com/heycalebszn/MoneyTrust-MFB.git
 cd authentication-api
 
 2. Install Dependencies
