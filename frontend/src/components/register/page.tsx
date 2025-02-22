@@ -204,6 +204,26 @@ const RegisterPage = () => {
                     )}
                   </div>
                 </div>
+
+                {/* Email Field for Individual */}
+                <div className="space-y-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Your Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={handleInputChange('email')}
+                    className={`w-full px-3 py-2 bg-white border ${
+                      errors.email ? 'border-red-300' : 'border-gray-300'
+                    } text-black rounded-md focus:outline-none focus:ring-1 focus:ring-comx-green focus:border-comx-green`}
+                    placeholder="Enter your email"
+                  />
+                  {errors.email && (
+                    <p className="text-red-600 text-xs mt-1">{errors.email}</p>
+                  )}
+                </div>
               </>
             ) : (
               <>
