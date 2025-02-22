@@ -14,6 +14,7 @@ type FormErrors = {
   email?: string;
   businessType?: string;
   incorporationDate?: string;
+  password?: string;
 };
 
 type FormData = {
@@ -22,6 +23,7 @@ type FormData = {
   email: string;
   businessType: string;
   incorporationDate: string;
+  password: string;
 };
 
 type BusinessOption = {
@@ -43,7 +45,8 @@ const RegisterPage = () => {
     lastName: '',
     email: '',
     businessType: '',
-    incorporationDate: ''
+    incorporationDate: '',
+    password: ''
   });
   const [date, setDate] = useState<Date | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -70,6 +73,10 @@ const RegisterPage = () => {
       newErrors.email = 'Email address is incorrect.';
     }
 
+    if (!formData.password.trim()) {
+      newErrors.password = 'Password is required';
+    }
+
     if (accountType === 'Corporate') {
       if (!formData.businessType) newErrors.businessType = 'Business type is required';
       if (!formData.incorporationDate) newErrors.incorporationDate = 'Date of incorporation is required';
@@ -79,15 +86,36 @@ const RegisterPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
-      // Proceed to next step if validation passes
-      navigate('/register/step2');
+      try {
+        const response = await fetch('http://localhost:5000/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Registration successful
+          navigate('/register/step2');
+        } else {
+          // Registration failed
+          setGlobalError(data.msg || 'Registration failed');
+        }
+      } catch (error) {
+        setGlobalError('Network error occurred');
+      }
     } else {
-      // Show global error if validation fails
-      setGlobalError('Phone number has already been used');
+      setGlobalError('Please fix the errors in the form');
     }
   };
 
@@ -224,6 +252,26 @@ const RegisterPage = () => {
                     <p className="text-red-600 text-xs mt-1">{errors.email}</p>
                   )}
                 </div>
+
+                {/* Password Field */}
+                <div className="space-y-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    value={formData.password}
+                    onChange={handleInputChange('password')}
+                    className={`w-full px-3 py-2 bg-white border ${
+                      errors.password ? 'border-red-300' : 'border-gray-300'
+                    } text-black rounded-md focus:outline-none focus:ring-1 focus:ring-comx-green focus:border-comx-green`}
+                    placeholder="Enter your password"
+                  />
+                  {errors.password && (
+                    <p className="text-red-600 text-xs mt-1">{errors.password}</p>
+                  )}
+                </div>
               </>
             ) : (
               <>
@@ -245,6 +293,26 @@ const RegisterPage = () => {
                   />
                   {errors.email && (
                     <p className="text-red-600 text-xs mt-1">{errors.email}</p>
+                  )}
+                </div>
+
+                {/* Password Field */}
+                <div className="space-y-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    value={formData.password}
+                    onChange={handleInputChange('password')}
+                    className={`w-full px-3 py-2 bg-white border ${
+                      errors.password ? 'border-red-300' : 'border-gray-300'
+                    } text-black rounded-md focus:outline-none focus:ring-1 focus:ring-comx-green focus:border-comx-green`}
+                    placeholder="Enter password"
+                  />
+                  {errors.password && (
+                    <p className="text-red-600 text-xs mt-1">{errors.password}</p>
                   )}
                 </div>
 
@@ -339,4 +407,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage; 
+export default RegisterPage;
