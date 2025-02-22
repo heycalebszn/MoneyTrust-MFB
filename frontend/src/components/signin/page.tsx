@@ -10,11 +10,48 @@ const SignInPage = () => {
     password: '',
     staySignedIn: false
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your sign-in logic here
-    console.log('Sign in attempted with:', formData);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      console.log('Login attempted with:', {
+        email: formData.email,
+        password: formData.password
+      });
+
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Login response:', data);
+
+      if (response.ok && data.token) {
+        localStorage.setItem('token', data.token);
+        console.log('Login successful, token stored');
+        navigate('/dashboard');
+      } else {
+        console.log('Login failed:', data.msg);
+        setError(data.msg || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Network error occurred');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -29,6 +66,12 @@ const SignInPage = () => {
         <div className="bg-white rounded-lg shadow-sm p-10">
           <h1 className="text-[32px] text-center text-gray-900 font-normal mb-2">Sign in to ComX</h1>
           <p className="text-[16px] text-gray-600 text-center mb-8">Enter your login credentials below.</p>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md mb-6">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
@@ -90,10 +133,10 @@ const SignInPage = () => {
             {/* Sign In Button */}
             <button
               type="submit"
-              onClick={() => navigate('/dashboard')}
-              className="w-full bg-comx-green text-white py-3 px-4 rounded-[4px] hover:bg-opacity-90 transition-all text-[16px] font-medium mt-8"
+              disabled={isLoading}
+              className="w-full bg-comx-green text-white py-3 px-4 rounded-[4px] hover:bg-opacity-90 transition-all text-[16px] font-medium mt-8 disabled:opacity-50"
             >
-              Sign in
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
 
             {/* Back Button */}
@@ -124,4 +167,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage; 
+export default SignInPage;
