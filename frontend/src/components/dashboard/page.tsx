@@ -3,7 +3,7 @@ import { Search, ChevronDown, Moon, Sun, LayoutGrid, LineChart, Briefcase, Users
 import logo from '../../assets/comx-logo.svg';
 
 type Product = {
-  name: string;
+  name: string
   quantity: number;
   price: number;
   code: string;
