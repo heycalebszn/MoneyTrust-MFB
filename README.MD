@@ -30,10 +30,10 @@ npm install
 
 Create a .env file in the root directory and add:
 
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_email_password
+MONGO_URI=
+JWT_SECRET=
+GMAIL_USER=kalejaiyecaleb@gmail.com
+GMAIL_PASSWORD=aezfimjdzzhhptdf
 
 	Note: If using Gmail, enable “Less secure apps” or set up an App Password.
 
