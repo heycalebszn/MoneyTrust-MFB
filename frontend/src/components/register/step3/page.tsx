@@ -12,10 +12,7 @@ const RegisterStep3Page = () => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
-  const contactInfo = {
-    phone: '+2347726394482',
-    email: 'name@mymail.com'
-  };
+  const email = 'name@mymail.com'; // This should come from previous step
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,20 +31,13 @@ const RegisterStep3Page = () => {
     }
   };
 
-  const handleResendCode = () => {
-    // Add resend code logic here
-    console.log('Resending code...');
-  };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#f5f5f5] p-4 font-roboto relative">
       <div className="w-full max-w-[480px]">
-        {/* Logo */}
         <div className="text-center mb-12">
           <img src={logo} alt="ComX Logo" className="mx-auto h-12" />
         </div>
 
-        {/* Account Details Form */}
         <div className="bg-white rounded-lg shadow-sm p-10">
           <h1 className="text-[32px] text-center text-gray-900 font-normal mb-2">Account details</h1>
           <p className="text-[16px] text-gray-600 text-center mb-8">
@@ -55,10 +45,9 @@ const RegisterStep3Page = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* OTP Field */}
             <div className="space-y-2">
               <label htmlFor="otp" className="block text-sm font-medium text-gray-700">
-                Enter the 4-digit code that was sent to {contactInfo.phone} and {contactInfo.email}
+                Enter the 4-digit code that was sent to {email}
               </label>
               <input
                 type="text"
@@ -75,14 +64,20 @@ const RegisterStep3Page = () => {
               )}
             </div>
 
-            {/* Resend Code Link */}
-            <div className="text-right">
+            <div className="flex justify-between items-center">
               <button
                 type="button"
-                onClick={handleResendCode}
                 className="text-gray-400 text-sm hover:text-gray-600 bg-white"
+                onClick={() => {/* Add resend code logic */}}
               >
                 Resend Code
+              </button>
+              <button
+                type="button"
+                className="text-gray-400 text-sm hover:text-gray-600 bg-white"
+                onClick={() => {/* Add phone verification logic */}}
+              >
+                Verify via Phone Call
               </button>
             </div>
 
@@ -94,21 +89,20 @@ const RegisterStep3Page = () => {
                 onClick={() => navigate('/register/step2')}
                 className="text-gray-900 font-medium uppercase hover:underline bg-white"
               >
-                Back
+                BACK
               </button>
 
               <button
                 type="submit"
                 className="text-red-600 font-medium uppercase hover:text-red-700 bg-white"
               >
-                Finish
+                FINISH
               </button>
             </div>
           </form>
         </div>
       </div>
 
-      {/* Support Center Button */}
       <div className="fixed bottom-8 right-8 z-50">
         <button 
           className="bg-red-500 w-16 h-16 rounded-full flex items-center justify-center shadow-xl hover:bg-red-600 transition-colors"
