@@ -51,6 +51,7 @@ const RegisterPage = () => {
   const [date, setDate] = useState<Date | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
   const [globalError, setGlobalError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
@@ -90,7 +91,13 @@ const RegisterPage = () => {
     e.preventDefault();
     
     if (validateForm()) {
+      setIsLoading(true);
       try {
+        console.log('Registration attempted with:', {
+          email: formData.email,
+          password: formData.password
+        });
+
         const response = await fetch('http://localhost:5000/api/auth/register', {
           method: 'POST',
           headers: {
@@ -103,16 +110,20 @@ const RegisterPage = () => {
         });
 
         const data = await response.json();
+        console.log('Registration response:', data);
 
         if (response.ok) {
-          // Registration successful
+          console.log('Registration successful');
           navigate('/register/step2');
         } else {
-          // Registration failed
+          console.log('Registration failed:', data.msg);
           setGlobalError(data.msg || 'Registration failed');
         }
       } catch (error) {
+        console.error('Registration error:', error);
         setGlobalError('Network error occurred');
+      } finally {
+        setIsLoading(false);
       }
     } else {
       setGlobalError('Please fix the errors in the form');
@@ -383,9 +394,12 @@ const RegisterPage = () => {
             {/* Next Step Button */}
             <button
               type="submit"
-              className="w-full bg-red-600 text-white py-3 px-4 rounded-[4px] hover:bg-red-700 transition-all text-[16px] font-medium uppercase mt-4"
+              disabled={isLoading}
+              className={`w-full bg-red-600 text-white py-3 px-4 rounded-[4px] hover:bg-red-700 transition-all text-[16px] font-medium uppercase mt-4 ${
+                isLoading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
-              Next Step
+              {isLoading ? 'Processing...' : 'Next Step'}
             </button>
           </form>
         </div>
