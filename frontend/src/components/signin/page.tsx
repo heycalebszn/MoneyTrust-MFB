@@ -90,6 +90,7 @@ const SignInPage = () => {
             {/* Sign In Button */}
             <button
               type="submit"
+              onClick={() => navigate('/dashboard')}
               className="w-full bg-comx-green text-white py-3 px-4 rounded-[4px] hover:bg-opacity-90 transition-all text-[16px] font-medium mt-8"
             >
               Sign in
