@@ -5,7 +5,7 @@ const sendEmail = require("../config/mailer");
 
 // Register User
 exports.register = async (req, res) => {
-  const { email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
   try {
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: "User already exists" });
